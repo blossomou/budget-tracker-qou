@@ -1,23 +1,23 @@
-const express = require("express");
-const logger = require("morgan");
-const mongoose = require("mongoose");
-const compression = require("compression");
-const apiRoutes = require("./routes/api.js");
+const express = require('express');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const compression = require('compression');
+const apiRoutes = require('./routes/api.js');
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(logger("dev"));
+app.use(logger('dev'));
 
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static("public"));
+app.use(express.static('public'));
 
 const mongoUri =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1/budget-tracker-ec";
+  process.env.MONGODB_URI || 'mongodb://127.0.0.1/budget-tracker';
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
 
