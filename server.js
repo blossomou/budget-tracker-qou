@@ -3,6 +3,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const compression = require('compression');
 const apiRoutes = require('./routes/api.js');
+require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,8 +17,7 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-const mongoUri =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1/budget-tracker';
+const mongoUri = process.env.MONGODB_URI;
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
 
