@@ -1,7 +1,7 @@
 let transactions = [];
 let myChart;
 
-fetch("/api/transaction")
+fetch('/api/transaction')
   .then((response) => {
     return response.json();
   })
@@ -16,21 +16,21 @@ fetch("/api/transaction")
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
-  let total = transactions.reduce((total, t) => {
+  let totalAmt = transactions.reduce((total, t) => {
     return total + parseInt(t.value);
   }, 0);
 
-  let totalEl = document.querySelector("#total");
-  totalEl.textContent = total;
+  let totalEl = document.querySelector('#total');
+  totalEl.textContent = totalAmt;
 }
 
 function populateTable() {
-  let tbody = document.querySelector("#tbody");
-  tbody.innerHTML = "";
+  let tbody = document.querySelector('#tbody');
+  tbody.innerHTML = '';
 
   transactions.forEach((transaction) => {
     // create and populate a table row
-    let tr = document.createElement("tr");
+    let tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${transaction.name}</td>
       <td>${transaction.value}</td>
@@ -62,17 +62,17 @@ function populateChart() {
     myChart.destroy();
   }
 
-  let ctx = document.getElementById("myChart").getContext("2d");
+  let ctx = document.getElementById('myChart').getContext('2d');
 
   myChart = new Chart(ctx, {
-    type: "line",
+    type: 'line',
     data: {
       labels,
       datasets: [
         {
-          label: "Total Over Time",
+          label: 'Total Over Time',
           fill: true,
-          backgroundColor: "#6666ff",
+          backgroundColor: '#6666ff',
           data,
         },
       ],
@@ -81,16 +81,16 @@ function populateChart() {
 }
 
 function sendTransaction(isAdding) {
-  let nameEl = document.querySelector("#t-name");
-  let amountEl = document.querySelector("#t-amount");
-  let errorEl = document.querySelector(".form .error");
+  let nameEl = document.querySelector('#t-name');
+  let amountEl = document.querySelector('#t-amount');
+  let errorEl = document.querySelector('.form .error');
 
   // validate form
-  if (nameEl.value === "" || amountEl.value === "") {
-    errorEl.textContent = "Missing Information";
+  if (nameEl.value === '' || amountEl.value === '') {
+    errorEl.textContent = 'Missing Information';
     return;
   } else {
-    errorEl.textContent = "";
+    errorEl.textContent = '';
   }
 
   // create record
@@ -114,12 +114,12 @@ function sendTransaction(isAdding) {
   populateTotal();
 
   // also send to server
-  fetch("/api/transaction", {
-    method: "POST",
+  fetch('/api/transaction', {
+    method: 'POST',
     body: JSON.stringify(transaction),
     headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
     },
   })
     .then((response) => {
@@ -127,11 +127,11 @@ function sendTransaction(isAdding) {
     })
     .then((data) => {
       if (data.errors) {
-        errorEl.textContent = "Missing Information";
+        errorEl.textContent = 'Missing Information';
       } else {
         // clear form
-        nameEl.value = "";
-        amountEl.value = "";
+        nameEl.value = '';
+        amountEl.value = '';
       }
     })
     .catch((err) => {
@@ -139,15 +139,18 @@ function sendTransaction(isAdding) {
       saveRecord(transaction);
 
       // clear form
-      nameEl.value = "";
-      amountEl.value = "";
+      nameEl.value = '';
+      amountEl.value = '';
     });
 }
 
-document.querySelector("#add-btn").onclick = function () {
-  sendTransaction(true);
-};
+var addBtn = document.querySelector('#add-btn');
 
-document.querySelector("#sub-btn").onclick = function () {
+addBtn.addEventListener('click', function (event) {
+  sendTransaction(true);
+});
+
+var subBtn = document.querySelector('#sub-btn');
+subBtn.addEventListener('click', function (event) {
   sendTransaction(false);
-};
+});
